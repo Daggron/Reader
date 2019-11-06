@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 let userSchema = new mongoose.Schema({
     name:{
         type:String,
-        min:3,
+        min:2,
         required:true,
         trim:true
     },
@@ -18,6 +18,10 @@ let userSchema = new mongoose.Schema({
     Date:{
         type:Date,
         default:Date().substring(0,10)
+    },
+    admin:{
+        type:Boolean,
+        default:false,
     }
 
 },{
