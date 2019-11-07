@@ -2,6 +2,8 @@ const router = require('express').Router();
 const User = require('../models/user.models');
 const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
+const passport = require('passport');
+require('../routes/auth/authenticate.routes')(passport);
 
 
 let transporter = nodemailer.createTransport({
@@ -61,8 +63,12 @@ router.route('/create/user').post(async (req,res)=>{
 
 });
 
-router.route('/get').get((req,res)=>{
-    res.send("Hello This is professional level standard");
+router.route('/login').post((req,res)=>{    
+    passport.authenticate('local',{
+        successRedirect:'/dashboard',
+        failureRedirect:'/login',
+        failureFlash:true
+    });
 });
 
 module.exports = router;
