@@ -13,7 +13,8 @@ router.route('/data').get(async (req,res)=>{
             description : article.description,
             authorProfile : article.authorProfile,
             Date : article.Date,
-            likes : article.likes
+            likes : article.likes,
+            category:article.category
         }
     });
 
@@ -26,6 +27,7 @@ router.route('/post').post(auth , (req,res)=>{
     article.description = req.body.description;
     article.author = res.locals.user.name;
     article.authorProfile = res.locals.user._id;
+    article.category = req.body.category;
 
     Articles.create(article)
     .then(()=>{
@@ -36,7 +38,7 @@ router.route('/post').post(auth , (req,res)=>{
     })
 });
 
-router.route('/:id').get((req,res)=>{
+router.route('id/:id').get((req,res)=>{
      Articles.findById(req.params.id)
      .then(response =>{
         res.json(response);
@@ -45,7 +47,30 @@ router.route('/:id').get((req,res)=>{
          res.status(401).json('There was an error'+err);
      })
     
-})
+});
+
+router.route('/category/:category').get((req,res)=>{
+    Articles.find({category:req.params.category})
+    .then(data=>data.map(article =>{
+        return {
+            id:article._id,
+            author:article.author,
+            title : article.title,
+            description : article.description,
+            authorProfile : article.authorProfile,
+            Date : article.Date,
+            likes : article.likes,
+            category:article.category
+        }
+    }))
+    .then(articles=>{
+        return res.json(articles);
+    })
+    .catch(err=>{
+        return res.status(401).json('There was an error'+err);
+    })
+});
+
 
 
 module.exports = router;
