@@ -43,6 +43,11 @@ app.use(expressValidator());
 app.use(passport.initialize());
 app.use(passport.session());
 
+app.get('*',(req,res,next)=>{
+    res.locals.user = req.user || null;
+    next();
+});
+
 app.use('/users',require('./routes/users.routes'));
 
 const PORT = process.env.PORT || 5000;

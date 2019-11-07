@@ -66,7 +66,8 @@ router.route('/create/user').post(async (req,res)=>{
 
 router.route('/login').get((req,res)=>{
     res.json('welcome to the login route');
-})
+});
+
 
 router.route('/login').post((req,res,next)=>{    
     passport.authenticate('local',{
@@ -76,13 +77,21 @@ router.route('/login').post((req,res,next)=>{
     })(req,res,next);
 });
 
+router.route('/dashboard').get(auth,async(req,res)=>{
+    console.log(res.locals.user);
+    
+    res.json('Welcome user');
+});
+
+router.route('/gweagon').get(async (req,res)=>{
+    console.log(res.locals.user);
+    res.json('trying this shit nigga');
+})
+
 router.route('/logout').get((req,res)=>{
     req.logout();
     res.redirect('/users/login');
-})
-
-router.route('/dashboard').get(auth,(req,res)=>{
-    res.json("Welcome to the dashboard");
 });
+
 
 module.exports = router;
