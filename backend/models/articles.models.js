@@ -23,6 +23,8 @@ let articleSchema = new mongoose.Schema({
     }
 },{
     timestamps:true
-})
+});
+
+let Articles = mongoose.model('Articles',articleSchema);
 
 module.exports = Articles

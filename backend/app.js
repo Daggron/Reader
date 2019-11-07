@@ -49,6 +49,7 @@ app.get('*',(req,res,next)=>{
 });
 
 app.use('/users',require('./routes/users.routes'));
+app.use('/articles',require('./routes/articles.routes'));
 
 const PORT = process.env.PORT || 5000;
 
