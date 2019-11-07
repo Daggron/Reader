@@ -4,6 +4,7 @@ const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const passport = require('passport');
 require('../routes/auth/authenticate.routes')(passport);
+const { auth } = require('../routes/auth/isAuthenticated.routes');
 
 
 let transporter = nodemailer.createTransport({
@@ -63,12 +64,25 @@ router.route('/create/user').post(async (req,res)=>{
 
 });
 
-router.route('/login').post((req,res)=>{    
+router.route('/login').get((req,res)=>{
+    res.json('welcome to the login route');
+})
+
+router.route('/login').post((req,res,next)=>{    
     passport.authenticate('local',{
-        successRedirect:'/dashboard',
-        failureRedirect:'/login',
-        failureFlash:true
-    });
+        successRedirect:'/users/dashboard',
+        failureRedirect:'/users/login',
+        failureFlash:false
+    })(req,res,next);
+});
+
+router.route('/logout').get((req,res)=>{
+    req.logout();
+    res.redirect('/users/login');
+})
+
+router.route('/dashboard').get(auth,(req,res)=>{
+    res.json("Welcome to the dashboard");
 });
 
 module.exports = router;

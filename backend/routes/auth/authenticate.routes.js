@@ -3,9 +3,9 @@ const bcrypt = require('bcryptjs');
 const LocalStargetgy = require('passport-local').Strategy;
 
 module.exports = async (passport)=>{
-    passport.use(new LocalStargetgy({usernameField:email},async (email,password,done)=>{
-
-        let user = await User.findOne({email:email});
+    passport.use(new LocalStargetgy({usernameField:'email'}, async(email,password,done)=>{
+        let query = {email:email};
+        let user = await User.findOne(query);
         if(!user){
             return done(null,false,{message:'No user with that email is found'});
         }
