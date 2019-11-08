@@ -71,6 +71,8 @@ router.route('/category/:category').get((req,res)=>{
     })
 });
 
+
+
 router.route('/delete/:id').delete((req,res)=>{
     Articles.findByIdAndDelete(req.params.id)
     .then(()=>{
