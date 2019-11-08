@@ -71,6 +71,28 @@ router.route('/category/:category').get((req,res)=>{
     })
 });
 
+router.route('/delete/:id').delete((req,res)=>{
+    Articles.findByIdAndDelete(req.params.id)
+    .then(()=>{
+        res.json('Article delted successfully');
+    })
+});
 
+router.route('/edit/:id').post(async (req,res)=>{
+    let article = await Articles.findById(req.params.id);
+    article.title = req.body.title;
+    article.description = req.body.description;
+    article.category = req.body.category;
+    article.save();
+    res.json('Article updated successfully');
+});
+
+
+
+
+// make an author routes  to find article written by author 
+// make category routes
+// make push notification 
+// make subscribe for news letters
 
 module.exports = router;
