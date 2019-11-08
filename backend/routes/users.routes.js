@@ -1,19 +1,15 @@
 const router = require('express').Router();
 const User = require('../models/user.models');
 const bcrypt = require('bcryptjs');
-const nodemailer = require('nodemailer');
+const sgMail = require('@sendgrid/mail');
 const passport = require('passport');
 require('../routes/auth/authenticate.routes')(passport);
 
 
 
-let transporter = nodemailer.createTransport({
-    service:'gmail',
-    auth:{
-        user: 'maihoodon01@gmail.com',
-        pass: 'camyreclcvucprzb'
-    }
-});
+
+
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 router.route('/create/user').post(async (req,res)=>{
 
@@ -42,12 +38,24 @@ router.route('/create/user').post(async (req,res)=>{
         let hash = await bcrypt.hash(req.body.password,salt);
         user.password = hash;
 
-        transporter.sendMail({
-           from : ' "Daggron 👻" returnofking04@gmail.com',
-           to: `${user.email}`,
-           subject:'Signup at reader',
-           html: 'Hey you have just signed up for readers'
-       });
+        const msg = {
+            to: `${user.email}`,
+            from: `returnofking04@gmail.com`,
+            subject: 'A new Article on Reader',
+            text: 'Hey You have Signed Up for the Reader',
+            html: `
+            <p>
+                Hey Thanks For Joining The Reader Website We Promise That Its Free And Always Will Be.
+                As Your Privacy Matters A Lot To Us , We Do Not Track Your Serach History On Reader.
+                And We Never Check Which Article You Are Reading.
+            </p>
+                <br>
+            <Strong>
+                Thanks For Making Account On Reader Hope You Find It Useful  
+            </Strong>`,
+          };
+
+          sgMail.send(msg);
 
        console.log(`message sent`);
 
