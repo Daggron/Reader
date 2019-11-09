@@ -50,7 +50,10 @@ router.route('id/:id').get((req,res)=>{
 });
 
 router.route('/category/:category').get((req,res)=>{
-    Articles.find({category:req.params.category})
+    
+    const regex = new RegExp(escapeRegex(req.params.category), 'gi');
+
+    Articles.find({category:regex})
     .then(data=>data.map(article =>{
         return {
             id:article._id,
@@ -91,10 +94,14 @@ router.route('/edit/:id').post(async (req,res)=>{
 
 
 
-
-// make an author routes  to find article written by author 
+// save user to req.session so that it can be used
 // make category routes
 // make push notification 
 // make subscribe for news letters
+
+const escapeRegex = (text)=> {
+    return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, "\\$&");
+};
+
 
 module.exports = router;
